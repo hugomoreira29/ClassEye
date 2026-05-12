@@ -59,7 +59,7 @@ def recognize_students(image_path):
             
             # Set a strict threshold (Default is 0.6. Lower = stricter)
             # 0.45 to 0.5 is usually a good sweet spot to prevent false positives
-            TOLERANCE_THRESHOLD = 0.45 
+            TOLERANCE_THRESHOLD = 0.5
             
             # Only accept the match if the distance is smaller than our threshold
             if face_distances[best_match_index] <= TOLERANCE_THRESHOLD:

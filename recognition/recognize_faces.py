@@ -7,7 +7,7 @@ import numpy as np
 from encode_faces import load_known_faces
 from detect_faces import detect_faces
 
-def recognize_students(image_path):
+def recognize_students(image_path, tolerance=0.5):
     """
     Detects faces in a classroom image, compares them with known students,
     labels them, saves the processed image, and returns a list of unique names.
@@ -18,8 +18,9 @@ def recognize_students(image_path):
     Returns:
         list: Unique recognized student names (including 'Unknown').
     """
-    dataset_path = "../dataset"
-    output_dir = "../output/processed_images"
+    _base = os.path.dirname(os.path.abspath(__file__))
+    dataset_path = os.path.join(_base, "..", "dataset")
+    output_dir   = os.path.join(_base, "..", "output", "processed_images")
     
     # 1. Load known student encodings and names
     print("Loading known faces...")
@@ -59,9 +60,8 @@ def recognize_students(image_path):
             
             # Set a strict threshold (Default is 0.6. Lower = stricter)
             # 0.45 to 0.5 is usually a good sweet spot to prevent false positives
-            TOLERANCE_THRESHOLD = 0.5
-            
-            # Only accept the match if the distance is smaller than our threshold
+            TOLERANCE_THRESHOLD = tolerance
+
             if face_distances[best_match_index] <= TOLERANCE_THRESHOLD:
                 name = known_names[best_match_index]
             else:

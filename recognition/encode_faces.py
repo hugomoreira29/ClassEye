@@ -2,7 +2,9 @@ import os
 import cv2
 import face_recognition
 
-def load_known_faces(dataset_path="../dataset"):
+def load_known_faces(dataset_path=None):
+    if dataset_path is None:
+        dataset_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "dataset")
     """
     Reads all student folders, loads images, generates face encodings, 
     and returns lists of encodings and corresponding names.

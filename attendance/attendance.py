@@ -2,6 +2,11 @@ import os
 import pandas as pd
 from datetime import datetime
 
+try:
+    from attendance_db import save_attendance
+except ImportError:
+    save_attendance = None
+
 
 def mark_attendance(present_students: list, all_students: list = None,
                     output_dir: str = None) -> str:
@@ -41,5 +46,17 @@ def mark_attendance(present_students: list, all_students: list = None,
     filename = f"attendance_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
     path = os.path.join(output_dir, filename)
     df.to_excel(path, index=False)
+
+    if save_attendance is not None:
+        try:
+            session_id = save_attendance(
+                present_students=list(present_set),
+                all_students=roster,
+                class_name="Default Class",
+            )
+            print(f"Attendance saved to SQLite session: {session_id}")
+        except Exception as exc:
+            print(f"Warning: SQLite attendance save failed: {exc}")
+
     print(f"Attendance saved to: {path}")
     return path
